@@ -63,21 +63,10 @@ function loadStoredGame(): StoredGame | null {
 function rebuildBoard(history: MoveRecord[]): Board {
   let board = createInitialBoard()
   for (const record of history) {
-    const next = board.map((row) => row.map((square) => (square ? { ...square } : null)))
-    next[record.from.y][record.from.x] = { ...record.piece }
-    next[record.to.y][record.to.x] = record.captured ? { ...record.captured } : null
-    board = next
+    // 必须把棋子从起点移动到终点，否则棋盘会停留在初始局面。
+    board = makeMove(board, { from: record.from, to: record.to })
   }
   return board
-}
-
-/**
- * 创建一局全新的初始状态。
- *
- * @returns 不含任何历史的初始棋盘。
- */
-function freshBoard(): Board {
-  return createInitialBoard()
 }
 
 /**

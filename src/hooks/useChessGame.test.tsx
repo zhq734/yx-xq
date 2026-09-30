@@ -17,6 +17,9 @@ describe('棋局状态 Hook', () => {
     expect(result.current.history).toHaveLength(1)
     expect(result.current.turn).toBe('black')
     expect(result.current.history[0].notation).toBe('炮二平五')
+    // 走子后棋盘必须真正更新：起点清空、终点落下同一枚棋子。
+    expect(result.current.board[7][1]).toBeNull()
+    expect(result.current.board[7][4]).toMatchObject({ side: 'red', type: 'cannon' })
 
     act(() => result.current.undo())
     expect(result.current.history).toHaveLength(0)

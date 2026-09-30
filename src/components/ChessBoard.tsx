@@ -107,6 +107,23 @@ export function ChessBoard({
     hintTargets.add(`${hintMove.to.x},${hintMove.to.y}`)
   }
 
+  /**
+   * 把棋盘逻辑坐标换算成点击层百分比坐标。
+   *
+   * 点击层与 SVG 共用 900 × 1040 的坐标系，交点位于 50 + n × 100，
+   * 因此必须使用交点真实比例定位，不能用均分网格，否则边缘会明显偏移。
+   *
+   * @param position 棋盘逻辑坐标。
+   * @returns 以棋盘左上角为原点的百分比定位。
+   */
+  const toHitStyle = (position: Position) => {
+    const display = toDisplayPosition(position, flipped)
+    return {
+      left: `${((display.x * 100 + 50) / 900) * 100}%`,
+      top: `${((display.y * 100 + 50) / 1040) * 100}%`,
+    }
+  }
+
   return (
     <div className="board-shell" aria-label="中国象棋棋盘">
       <svg className="chess-board" viewBox="0 0 900 1040" role="img" aria-label="中国象棋棋盘">
@@ -248,6 +265,7 @@ export function ChessBoard({
               <button
                 key={`${x}-${y}`}
                 type="button"
+                style={toHitStyle({ x, y })}
                 className={`board-hit${isLegal ? ' is-legal' : ''}${isHint ? ' is-hint' : ''}`}
                 aria-label={`${String.fromCharCode(65 + x)}${y + 1} ${label}${isLegal ? '，可落子' : ''}`}
                 role="gridcell"
