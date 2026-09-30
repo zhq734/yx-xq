@@ -51,8 +51,8 @@ export interface DifficultyOption {
 }
 
 export const DIFFICULTY_OPTIONS: DifficultyOption[] = [
-  { id: 'easy', label: '入门', description: '会犯错，适合熟悉规则', depth: 1 },
-  { id: 'medium', label: '进阶', description: '两步搜索，攻守均衡', depth: 2 },
-  { id: 'hard', label: '高手', description: '三步搜索，善于捕捉机会', depth: 3 },
-  { id: 'master', label: '大师', description: '四步搜索，计算更深远', depth: 4 },
+  { id: 'easy', label: '入门', description: '会犯错，适合熟悉规则', depth: 2 },
+  { id: 'medium', label: '进阶', description: '三层搜索，攻守均衡', depth: 3 },
+  { id: 'hard', label: '高手', description: '四层搜索，善于捕捉机会', depth: 4 },
+  { id: 'master', label: '大师', description: '五层搜索，计算更深远', depth: 5 },
 ]

@@ -21,6 +21,7 @@
   --success: #28744f;
   --shadow-sm: 0 8px 24px rgba(35, 43, 37, 0.08);
   --shadow-lg: 0 30px 80px rgba(28, 36, 30, 0.18);
+  --overlay: rgba(24, 33, 28, 0.42);
   --board-surface-start: #efd7a4;
   --board-surface-mid: #dfbd78;
   --board-surface-end: #c99a52;
@@ -58,6 +59,7 @@
   --success: #54a979;
   --shadow-sm: 0 10px 30px rgba(0, 0, 0, 0.22);
   --shadow-lg: 0 34px 90px rgba(0, 0, 0, 0.48);
+  --overlay: rgba(4, 8, 10, 0.62);
   --board-surface-start: #d8b66f;
   --board-surface-mid: #c79b50;
   --board-surface-end: #ad7834;
@@ -558,6 +560,133 @@ button:disabled {
 .game-actions svg {
   width: 18px;
   height: 18px;
+}
+
+.game-over-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: var(--overlay);
+  backdrop-filter: blur(10px);
+  animation: game-over-fade 220ms ease-out;
+}
+
+.game-over-dialog {
+  position: relative;
+  width: min(100%, 360px);
+  padding: 34px 28px 28px;
+  text-align: center;
+  background: var(--bg-elevated-solid);
+  border: 1px solid var(--border-default);
+  border-radius: 24px;
+  box-shadow: var(--shadow-lg);
+  animation: game-over-rise 260ms cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+
+.game-over-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  font-size: 20px;
+  line-height: 1;
+  color: var(--text-muted);
+  cursor: pointer;
+  background: var(--bg-inset);
+  border: 0;
+  border-radius: 50%;
+}
+
+.game-over-close:hover {
+  color: var(--text-primary);
+  background: var(--border-default);
+}
+
+.game-over-orb {
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 16px;
+  font-family: 'Noto Serif SC', 'Songti SC', serif;
+  font-size: 34px;
+  font-weight: 900;
+  color: var(--piece-red-text);
+  background: radial-gradient(circle at 35% 25%, var(--piece-red-highlight), var(--piece-red));
+  border: 2px solid var(--board-frame);
+  border-radius: 50%;
+  box-shadow: var(--shadow-sm);
+}
+
+.game-over-orb--black {
+  color: var(--piece-black-text);
+  background: radial-gradient(circle at 35% 25%, var(--piece-black-highlight), var(--piece-black));
+}
+
+.game-over-title {
+  margin: 6px 0 4px;
+  font-family: 'Noto Serif SC', 'Songti SC', serif;
+  font-size: 34px;
+  font-weight: 900;
+  color: var(--text-primary);
+}
+
+.game-over-reason {
+  margin: 0 0 22px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.game-over-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.game-over-actions button {
+  display: inline-flex;
+  flex: 1;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  padding: 11px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  cursor: pointer;
+  background: var(--bg-inset);
+  border: 1px solid var(--border-default);
+  border-radius: 12px;
+}
+
+.game-over-actions button:hover {
+  background: var(--border-default);
+}
+
+.game-over-actions button.primary {
+  color: var(--bg-elevated-solid);
+  background: var(--accent);
+  border-color: transparent;
+}
+
+.game-over-actions button.primary:hover {
+  background: var(--accent-bright);
+}
+
+.game-over-actions svg {
+  width: 16px;
+  height: 16px;
+}
+
+@keyframes game-over-fade {
+  from { opacity: 0; }
+}
+
+@keyframes game-over-rise {
+  from { opacity: 0; transform: translateY(16px) scale(0.96); }
 }
 
 .game-panel {

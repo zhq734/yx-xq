@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { ChessBoard } from './components/ChessBoard'
 import { GameActions } from './components/GameActions'
+import { GameOverDialog } from './components/GameOverDialog'
 import { GamePanel } from './components/GamePanel'
 import { Header } from './components/Header'
 import { useChessGame } from './hooks/useChessGame'
@@ -27,6 +28,7 @@ function getInitialTheme(): boolean {
 export default function App() {
   const [darkMode, setDarkMode] = useState(getInitialTheme)
   const [soundEnabled, setSoundEnabled] = useState(() => localStorage.getItem('yijing-xiangqi-sound') !== 'off')
+  const [resultDismissed, setResultDismissed] = useState(false)
   const playSound = useSound(soundEnabled)
   const chessGame = useChessGame(playSound)
 
@@ -44,6 +46,25 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('yijing-xiangqi-sound', soundEnabled ? 'on' : 'off')
   }, [soundEnabled])
+
+  /**
+   * 对局重新进入进行中状态后重置关闭状态，保证再次终局时弹窗仍会弹出。
+   */
+  useEffect(() => {
+    if (!chessGame.isFinished) setResultDismissed(false)
+  }, [chessGame.isFinished])
+
+  /**
+   * 支持按 Esc 关闭终局弹窗。
+   */
+  useEffect(() => {
+    if (!chessGame.isFinished) return
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setResultDismissed(true)
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [chessGame.isFinished])
 
   /**
    * 注册离线缓存，让应用安装到桌面后仍可对弈。
@@ -125,6 +146,16 @@ export default function App() {
         <p>弈境 · 以棋会友，落子无悔</p>
         <span>规则、AI 与棋局数据均在本机运行</span>
       </footer>
+
+      {chessGame.isFinished && !resultDismissed && (
+        <GameOverDialog
+          result={chessGame.gameResult}
+          historyLength={chessGame.history.length}
+          onRestart={() => chessGame.newGame()}
+          onUndo={() => chessGame.undo()}
+          onClose={() => setResultDismissed(true)}
+        />
+      )}
     </div>
   )
 }
